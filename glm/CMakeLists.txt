@@ -53,7 +53,7 @@ target_include_directories(glm INTERFACE
 
 install(TARGETS glm EXPORT glm)
 
-if(BUILD_STATIC_LIBS)
+if(GLM_BUILD_STATIC_LIBS)
 add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
@@ -63,9 +63,19 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
 	target_link_libraries(glm_static PUBLIC glm)
 	add_library(glm::glm_static ALIAS glm_static)
+	message(STATUS "Building GLM as static library")
+	
+	if(GLM_INSTALL)
+		install(
+			TARGETS glm_static 
+			EXPORT glm
+			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+	endif()
 endif()
 
-if(BUILD_SHARED_LIBS)
+if(GLM_BUILD_SHARED_LIBS)
 add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
@@ -75,4 +85,14 @@ add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
 	target_link_libraries(glm_shared PUBLIC glm)
 	add_library(glm::glm_shared ALIAS glm_shared)
+	message(STATUS "Building GLM as shared library")
+
+	if(GLM_INSTALL)
+		install(
+			TARGETS glm_shared 
+			EXPORT glm
+			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+	endif()
 endif()
